@@ -28,6 +28,29 @@ app.get("/api/notes", (req, res) => {
     });
 });
 
+//post path to receive new note 
+app.post("/api/notes", (req, res) => {
+    fs.readFile(dataPath, "utf8", (err, data) => {
+        if (err) {
+            throw err
+        }
+        let notesArray = JSON.parse(data);
+        let newNote = req.body;
+        notesArray.push(newNote);
+        //add unique ID to note
+        let newArray = JSON.stringify(notesArray);
+        fs.writeFile(dataPath, newArray, "utf8", (err) => {
+            if (err) {
+                throw err;
+            } res.status(200).send("new note added: " + JSON.stringify(newNote));
+        })
+    })
+})
+
+// path to delete note with specific id
+app.delete("/api/notes/:id", (req, res) => {
+
+})
 
 app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
