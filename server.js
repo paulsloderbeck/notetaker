@@ -35,7 +35,9 @@ app.post("/api/notes", (req, res) => {
             throw err
         }
         let notesArray = JSON.parse(data);
+        const newId = Object.keys(notesArray).length + 1;
         let newNote = req.body;
+        newNote.id = newId;
         notesArray.push(newNote);
         //add unique ID to note
         let newArray = JSON.stringify(notesArray);
@@ -49,7 +51,7 @@ app.post("/api/notes", (req, res) => {
 
 // path to delete note with specific id
 app.delete("/api/notes/:id", (req, res) => {
-
+    //use data.find to get array index with id
 })
 
 app.listen(PORT, function () {
