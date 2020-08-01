@@ -39,7 +39,6 @@ app.post("/api/notes", (req, res) => {
         let newNote = req.body;
         newNote.id = newId;
         notesArray.push(newNote);
-        //add unique ID to note
         let newArray = JSON.stringify(notesArray);
         fs.writeFile(dataPath, newArray, "utf8", (err) => {
             if (err) {
@@ -51,9 +50,26 @@ app.post("/api/notes", (req, res) => {
 
 // path to delete note with specific id
 app.delete("/api/notes/:id", (req, res) => {
-    //use data.find to get array index with id
+    fs.readFile(dataPath, "utf8", (err, data) => {
+        if (err) {
+            throw err
+        }
+        let findId = Number(req.params.id);
+        let deleteArray = JSON.parse(data);
+        let deleteIndex = deleteArray.findIndex((element) => {
+            return findId === element.id;
+        })
+        deleteArray.splice(deleteIndex, 1);
+        let newArray = JSON.stringify(deleteArray);
+        fs.writeFile(dataPath, newArray, "utf8", (err) => {
+            if (err) {
+                throw err;
+            } res.status(200).send("note deleted");
+        })
+    });
 })
 
+//start listener
 app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
 });
