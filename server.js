@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const app = express();
-const PORT = 3000;
+var PORT = process.env.PORT || 3001;
 const dataPath = "./db/db.json";
 
 app.use(express.urlencoded({ extended: true }));
